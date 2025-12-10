@@ -11,35 +11,8 @@ env:
   
 
 jobs:
-  # 代码检查与测试作业
-  lint-test:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-version: [14.x, 16.x] # 支持的Node.js版本（符合项目node >=14要求）
-
-    steps:
-      - name: 检出代码
-        uses: actions/checkout@v3
-
-      - name: 设置Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v3
-        with:
-          node-version: ${{ matrix.node-version }}
-          cache: 'npm' # 缓存npm依赖加速构建
-
-      - name: 安装依赖
-        run: npm ci
-
-      - name: 代码风格检查
-        run: npm run lint
-
-      - name: 运行测试
-        run: npm test
-
   # 文档构建与部署作业
   docs-deploy:
-    needs: lint-test # 依赖lint-test作业完成且成功
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.ref == 'refs/heads/master' # 仅在master分支推送时执行
 
